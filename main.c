@@ -8,7 +8,7 @@
 #include "libs/imu.h"
 #include "libs/secure_digital_card.h"
 
-#define FILENAME "data_logger.csv"
+#define FILENAME "data_logger3.csv"
 
 static volatile bool _call_capture = false;
 static volatile bool _call_mount = false;
@@ -24,7 +24,6 @@ void call_capture() {
 void call_mount() {
     _call_mount = true;
 }
-
 
 void init() {
     stdio_init_all();
@@ -50,7 +49,7 @@ void start_stop_capture_data() {
         buzzer_double_beep();
         leds_set_green();
         _capture = false;
-        display_set_status("Waiting");
+        display_set_status("ready");
     } else {
         buzzer_beep();
         leds_set_red();
@@ -107,6 +106,7 @@ void main() {
         float* angles = imu_angles();
         char data[128];
         sprintf(data, "%d, %.0f, %.0f, %.0f, %.0f, %.0f, %.0f\n", _samples++, accelerations[0], accelerations[1], accelerations[2], angles[0], angles[1], angles[2]);
+        display_set_samples(_samples);
         int status = secure_digital_card_save_data(FILENAME, data);
         if (status != 0) display_set_message("Err write");
     }

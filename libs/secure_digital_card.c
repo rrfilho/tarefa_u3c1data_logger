@@ -84,7 +84,7 @@ void secure_digital_card_print_file(const char *filename) {
     printf("--- inicio %s ---\n", filename);
     while (f_read(&file, buffer, sizeof(buffer) - 1, &br) == FR_OK && br > 0) {
         buffer[br] = '\0';
-        printf("%s\n", buffer);
+        printf("%s", buffer);
     }
     f_close(&file);
     printf("--- fim %s ---\n\n", filename);
